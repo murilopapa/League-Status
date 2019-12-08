@@ -3,6 +3,7 @@ package com.example.leaguestatus.data.local.model
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
+import com.example.leaguestatus.model.League
 
 @Entity(
     foreignKeys = arrayOf(
@@ -30,3 +31,15 @@ data class LeagueEntity(
     val summonerId: String,
     val leaguePoints: Int
 )
+
+fun List<LeagueEntity>.toLeague(): List<League> =
+    map {
+        League(
+            it.leaguePoints,
+            it.tier,
+            it.rank,
+            it.losses,
+            it.wins,
+            it.summonerName
+        )
+    }

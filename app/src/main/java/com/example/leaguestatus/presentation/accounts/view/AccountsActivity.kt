@@ -25,6 +25,7 @@ class AccountsActivity : AppCompatActivity() {
         setupRecyclerView()
         setupListeners()
         presenter.getAllSummoners()
+        presenter.getAllLeague()
         observeChanges()
     }
 

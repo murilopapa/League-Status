@@ -10,17 +10,15 @@ class SummonersRepository(
     private val summonerRemoteDataSource: SummonerRemoteDataSource
 ) {
     fun getAllSummoners() = entitySummonerDao.getAllSummoners()
-    fun getSummoner(summonerName: String): List<SummonerEntity> {
-        val result = summonerRemoteDataSource.getSummoner(summonerName)
-        result.execute().body()?.let {
+    fun getSummoner(summonerName: String): List<SummonerEntity> =
+        summonerRemoteDataSource.getSummoner(summonerName).execute().body()?.let {
             if (entitySummonerDao.getAllSummoners().contains(it.toSummonerEntity())) {
-                return entitySummonerDao.getAllSummoners()
+                entitySummonerDao.getAllSummoners()
             } else {
                 entitySummonerDao.addSummoner(it.toSummonerEntity())
-                return entitySummonerDao.getAllSummoners()
+                entitySummonerDao.getAllSummoners()
             }
         } ?: let {
-            return entitySummonerDao.getAllSummoners()
+            entitySummonerDao.getAllSummoners()
         }
-    }
 }

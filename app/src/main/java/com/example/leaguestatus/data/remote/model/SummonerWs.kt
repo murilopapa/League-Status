@@ -1,7 +1,7 @@
 package com.example.leaguestatus.data.remote.model
 
 import com.example.leaguestatus.data.local.model.SummonerEntity
-import com.example.leaguestatus.model.Summoner
+import java.io.Serializable
 
 data class SummonerWs(
     val accountId: String,
@@ -11,17 +11,7 @@ data class SummonerWs(
     val summonerLevel: Long,
     val revisionDate: Long,
     val id: String
-)
-
-fun List<SummonerWs>.toSummoner(): List<Summoner> =
-    map {
-        Summoner(
-            it.profileIconId,
-            it.name,
-            it.summonerLevel,
-            it.revisionDate
-        )
-    }
+): Serializable
 
 fun List<SummonerWs>.toSummonerEntity(): List<SummonerEntity> =
     map {

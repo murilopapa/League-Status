@@ -6,14 +6,14 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.leaguestatus.R
-import com.example.leaguestatus.model.Summoner
+import com.example.leaguestatus.model.User
 import kotlinx.android.synthetic.main.account_card.view.*
 
 class AccountsAdapter : RecyclerView.Adapter<AccountsAdapter.ViewHolder>() {
 
-    private var data = mutableListOf<Summoner>()
+    private var data = mutableListOf<User>()
 
-    fun setData(summoner: List<Summoner>) {
+    fun setData(summoner: List<User>) {
         data.clear()
         data.addAll(summoner)
         notifyDataSetChanged()
@@ -23,6 +23,8 @@ class AccountsAdapter : RecyclerView.Adapter<AccountsAdapter.ViewHolder>() {
         val summoner = data[position]
         holder.apply {
             name.text = summoner.name
+            elo.text = summoner.rank + summoner.tier
+            pdl.text = summoner.leaguePoints.toString()
             //TODO set all values from data
         }
 

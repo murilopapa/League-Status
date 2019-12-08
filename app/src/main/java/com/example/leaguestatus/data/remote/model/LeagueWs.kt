@@ -1,13 +1,15 @@
 package com.example.leaguestatus.data.remote.model
 
 import com.example.leaguestatus.data.local.model.LeagueEntity
-import com.example.leaguestatus.model.League
+import com.example.leaguestatus.data.local.model.MiniSeriesEntity
+import java.io.Serializable
 
 
 data class LeagueWs(
     val queueType: String,
     val summonerName: String,
     val hotStreak: Boolean,
+    val miniSeries: MiniSeriesWs,
     val wins: Int,
     val veteran: Boolean,
     val losses: Int,
@@ -18,17 +20,23 @@ data class LeagueWs(
     val tier: String,
     val summonerId: String,
     val leaguePoints: Int
+) : Serializable
+
+
+data class MiniSeriesWs(
+    val progress: String,
+    val losses: Int,
+    val target: Int,
+    val wins: Int
 )
 
-fun List<LeagueWs>.toLeague(): List<League> =
-    map {
-        League(
-            it.leaguePoints,
-            it.tier,
-            it.rank,
+fun MiniSeriesWs.toMiniSeriesEntity(): MiniSeriesEntity =
+    let {
+        MiniSeriesEntity(
+            it.progress,
             it.losses,
-            it.wins,
-            it.summonerName
+            it.target,
+            it.wins
         )
     }
 
@@ -38,25 +46,7 @@ fun List<LeagueWs>.toLeagueEntity(): List<LeagueEntity> =
             it.queueType,
             it.summonerName,
             it.hotStreak,
-            it.wins,
-            it.veteran,
-            it.losses,
-            it.rank,
-            it.leagueId,
-            it.inactive,
-            it.freshBlood,
-            it.tier,
-            it.summonerId,
-            it.leaguePoints
-        )
-    }
-
-fun LeagueWs.toLeagueEntity(): LeagueEntity =
-    let {
-        LeagueEntity(
-            it.queueType,
-            it.summonerName,
-            it.hotStreak,
+            it.miniSeries.toMiniSeriesEntity(),
             it.wins,
             it.veteran,
             it.losses,

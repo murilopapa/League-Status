@@ -15,8 +15,8 @@ import kotlinx.android.synthetic.main.search_bar.view.*
 import org.koin.android.ext.android.inject
 
 class AccountsActivity : AppCompatActivity() {
-    private val summonerListAdapter = AccountsAdapter()
 
+    private val summonerListAdapter = AccountsAdapter()
     private val presenter: AccountsPresenter by inject()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -24,13 +24,12 @@ class AccountsActivity : AppCompatActivity() {
         setContentView(R.layout.activity_accounts)
         setupRecyclerView()
         setupListeners()
-        presenter.getAllSummoners()
-        presenter.getAllLeague()
+        presenter.getAllUsers()
         observeChanges()
     }
 
     private fun observeChanges() {
-        presenter.summonerLiveData.observe(this, Observer {
+        presenter.userLiveData.observe(this, Observer {
             when (it?.status) {
                 Status.LOADING -> {
                     progressBar.visibility = View.VISIBLE
@@ -58,6 +57,7 @@ class AccountsActivity : AppCompatActivity() {
 
             } else {
                 Toast.makeText(this, "Not empty search argument", Toast.LENGTH_SHORT).show()
+                println("Searching ${include.editText.text}")
                 presenter.getSearchedSummoner(include.editText.text.toString())
             }
 

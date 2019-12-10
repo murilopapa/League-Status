@@ -1,44 +1,56 @@
 package com.example.leaguestatus.data.repository.user
 
-import com.example.leaguestatus.data.local.dataSource.UserEntityDao
-import com.example.leaguestatus.data.local.model.UserEntity
-import com.example.leaguestatus.data.local.model.toUser
+import com.example.leaguestatus.data.local.dataSource.LeagueEntityDao
+import com.example.leaguestatus.data.local.dataSource.SummonerEntityDao
+import com.example.leaguestatus.data.local.model.toLeague
+import com.example.leaguestatus.data.local.model.toSummoner
 import com.example.leaguestatus.data.remote.dataSource.LeagueRemoteDataSource
 import com.example.leaguestatus.data.remote.dataSource.SummonerRemoteDataSource
-import com.example.leaguestatus.data.remote.model.toLeagueEntity
-import com.example.leaguestatus.data.remote.model.toSummonerEntity
+import com.example.leaguestatus.data.remote.model.*
+import com.example.leaguestatus.model.User
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 class UserRepository(
-    private val entityUserDao: UserEntityDao,
+    private val summonerEntityDao: SummonerEntityDao,
+    private val leagueEntityDao: LeagueEntityDao,
     private val leagueRemoteDataSource: LeagueRemoteDataSource,
     private val summonerRemoteDataSource: SummonerRemoteDataSource
 ) {
-    fun getAllUsers() = entityUserDao.getAllUsersData().toUser()
-
-    fun getNewUser(summonerName: String) =
-        if (checkUser(summonerName).contains(true)) {
-            entityUserDao.getAllUsersData().toUser()
-        } else {
-            summonerRemoteDataSource.getSummoner(summonerName).execute().body()?.let { summonerWs ->
-                leagueRemoteDataSource.getLeague(summonerWs.id).execute().body()?.let { leagueWs ->
-
-                    entityUserDao.addUserData(
-                        UserEntity(
-                            null,
-                            summonerWs.toSummonerEntity(),
-                            leagueWs.toLeagueEntity()
-                        )
+    suspend fun getAllUsers() =
+        withContext(Dispatchers.IO) {
+            summonerEntityDao.getAllSummonerData().map { summoner ->
+                leagueEntityDao.getAllLeagueData().filter { league ->
+                    summoner.id == league.summonerId
+                }.let { leagueList ->
+                    User(
+                        summoner.toSummoner(),
+                        leagueList.toLeague()
                     )
-                    entityUserDao.getAllUsersData().toUser()
                 }
             }
         }
 
 
-    fun checkUser(summonerName: String) =
-        entityUserDao.getAllUsersData().map {
-            it.summoner.name == summonerName
+    suspend fun getNewSummoner(summonerName: String) =
+        withContext(Dispatchers.IO) {
+            summonerEntityDao.getAllSummonerData().filter { summoner ->
+                summoner.id == summonerName
+            }.let { summonerList ->
+                if (summonerList.isNullOrEmpty()) {
+                    (summonerRemoteDataSource.getSummoner(summonerName).execute().body() as SummonerWs).let { summonerWs ->
+                        summonerEntityDao.addUserData(summonerWs.toSummonerEntity())
+                        (leagueRemoteDataSource.getLeague(summonerWs.id).execute().body() as List<LeagueWs>).let { leagueList ->
+                            leagueEntityDao.addLeagueData(leagueList.toLeagueEntity())
+                        }
+                    }
+                }
+            }
+            getAllUsers().toMutableList()
         }
-
-
 }
+
+
+
+
+

@@ -21,7 +21,8 @@ val databaseModules = module {
         ).build()
     }
 
-    single { get<AppDataBase>().userEntityDao() }
+    single { get<AppDataBase>().summonerEntityDao() }
+    single { get<AppDataBase>().leagueEntityDao() }
 }
 
 val presenterModules = module {
@@ -30,7 +31,7 @@ val presenterModules = module {
     }
 }
 val repositoryModules = module {
-    single { UserRepository(get(), get(), get()) }
+    single { UserRepository(get(), get(), get(), get()) }
 }
 val useCaseModules = module {
     single { UserUseCase(get()) }

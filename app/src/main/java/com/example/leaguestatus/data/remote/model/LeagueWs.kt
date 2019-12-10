@@ -1,9 +1,8 @@
 package com.example.leaguestatus.data.remote.model
 
 import com.example.leaguestatus.data.local.model.LeagueEntity
-import com.example.leaguestatus.data.local.model.MiniSeriesEntity
+import com.example.leaguestatus.model.League
 import java.io.Serializable
-
 
 data class LeagueWs(
     val queueType: String,
@@ -30,23 +29,13 @@ data class MiniSeriesWs(
     val wins: Int
 )
 
-fun MiniSeriesWs.toMiniSeriesEntity(): MiniSeriesEntity =
+fun LeagueWs.toLeagueEntity(): LeagueEntity =
     let {
-        MiniSeriesEntity(
-            it.progress,
-            it.losses,
-            it.target,
-            it.wins
-        )
-    }
-
-fun List<LeagueWs>.toLeagueEntity(): List<LeagueEntity> =
-    map {
         LeagueEntity(
+            0,
             it.queueType,
             it.summonerName,
             it.hotStreak,
-            it.miniSeries.toMiniSeriesEntity(),
             it.wins,
             it.veteran,
             it.losses,
@@ -58,4 +47,34 @@ fun List<LeagueWs>.toLeagueEntity(): List<LeagueEntity> =
             it.summonerId,
             it.leaguePoints
         )
+    }
+
+fun LeagueWs.toLeague(): League =
+    let {
+        League(
+            it.queueType,
+            it.summonerName,
+            it.hotStreak,
+            it.wins,
+            it.veteran,
+            it.losses,
+            it.rank,
+            it.leagueId,
+            it.inactive,
+            it.freshBlood,
+            it.tier,
+            it.summonerId,
+            it.leaguePoints
+        )
+    }
+
+fun List<LeagueWs>.toLeague(): List<League> =
+    map {
+        it.toLeague()
+    }
+
+
+fun List<LeagueWs>.toLeagueEntity(): List<LeagueEntity> =
+    map {
+        it.toLeagueEntity()
     }

@@ -13,23 +13,23 @@ class AccountsPresenter(
 ) {
     var userLiveData = MutableLiveDataResource<List<User>>()
 
-
-    fun getSearchedSummoner(summonerName: String) {
+    fun getAllUsers() {
         CoroutineScope(IO).launch {
             userLiveData.postValue(Resource.loading())
-            userUseCase.getSummonerByName(summonerName)?.let {
+            userUseCase.getAllUsers().let {
+                println(it)
                 userLiveData.postValue(Resource.success(it))
             }
         }
     }
 
-    fun getAllUsers() {
+
+    fun getSearchedSummoner(summonerName: String) {
         CoroutineScope(IO).launch {
             userLiveData.postValue(Resource.loading())
-            userUseCase.getAllUsers().let {
+            userUseCase.getSummonerByName(summonerName).let {
                 userLiveData.postValue(Resource.success(it))
             }
-
         }
     }
 

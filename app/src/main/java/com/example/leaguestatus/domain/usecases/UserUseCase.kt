@@ -13,7 +13,7 @@ class UserUseCase(private val repository: UserRepository) {
 
     suspend fun getSummonerByName(summonerName: String) =
         withContext(Dispatchers.IO) {
-            repository.getNewUser(summonerName)
+            repository.getNewSummoner(summonerName)
         }
 
 

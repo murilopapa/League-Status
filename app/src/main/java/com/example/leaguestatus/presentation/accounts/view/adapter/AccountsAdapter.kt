@@ -22,10 +22,16 @@ class AccountsAdapter : RecyclerView.Adapter<AccountsAdapter.ViewHolder>() {
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val summoner = data[position]
         holder.apply {
-            name.text = summoner.name
-            elo.text = summoner.rank + summoner.tier
-            pdl.text = summoner.leaguePoints.toString()
-            //TODO set all values from data
+            if (summoner.queue.isNullOrEmpty()) {
+                name.text = summoner.summoner.name
+                elo.text = "SEM RANKING"
+                pdl.text = "SEM PDL"
+            } else {
+                name.text = summoner.summoner.name
+                elo.text = "${summoner.queue.first().queueType} = ${summoner.queue.first().tier} ${summoner.queue.first().rank}"
+                pdl.text = "${summoner.queue.first().leaguePoints} PDL"
+            }
+
         }
 
     }

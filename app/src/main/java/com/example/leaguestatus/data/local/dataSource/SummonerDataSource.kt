@@ -4,13 +4,13 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.example.leaguestatus.data.local.model.UserEntity
+import com.example.leaguestatus.data.local.model.SummonerEntity
 
 @Dao
-interface UserEntityDao {
-    @Query("SELECT * FROM UserEntity")
-    fun getAllUsersData(): List<UserEntity>
+interface SummonerEntityDao {
+    @Query("SELECT * FROM SummonerEntity")
+    fun getAllSummonerData(): List<SummonerEntity>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun addUserData(newUser: UserEntity)
+    fun addUserData(newSummoner: SummonerEntity)
 }

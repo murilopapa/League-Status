@@ -66,6 +66,7 @@ class AccountsActivity : AppCompatActivity() {
 
     private fun setupRecyclerView() {
         rvAccounts.apply {
+            summonerListAdapter.setContext(context)
             adapter = summonerListAdapter
             layoutManager = LinearLayoutManager(context)
         }

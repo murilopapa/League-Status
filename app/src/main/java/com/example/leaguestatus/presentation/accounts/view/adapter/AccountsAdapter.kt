@@ -1,17 +1,24 @@
 package com.example.leaguestatus.presentation.accounts.view.adapter
 
 
+import android.content.Context
+import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.leaguestatus.R
 import com.example.leaguestatus.model.User
+import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.account_card.view.*
 
-class AccountsAdapter : RecyclerView.Adapter<AccountsAdapter.ViewHolder>() {
-
+class AccountsAdapter() : RecyclerView.Adapter<AccountsAdapter.ViewHolder>() {
+    lateinit var baseContext: Context
     private var data = mutableListOf<User>()
+
+    fun setContext(context: Context) {
+        baseContext = context
+    }
 
     fun setData(summoner: List<User>) {
         data.clear()
@@ -28,9 +35,10 @@ class AccountsAdapter : RecyclerView.Adapter<AccountsAdapter.ViewHolder>() {
                 pdl.text = "SEM PDL"
             } else {
                 name.text = summoner.summoner.name
-                elo.text = "${summoner.queue.first().queueType} = ${summoner.queue.first().tier} ${summoner.queue.first().rank}"
+                elo.text = "${summoner.queue.first().tier} ${summoner.queue.first().rank}"
                 pdl.text = "${summoner.queue.first().leaguePoints} PDL"
             }
+            icon.setImageURI(Uri.parse("http://ddragon.leagueoflegends.com/cdn/9.23.1/img/profileicon/588.png"))
 
         }
 

@@ -17,7 +17,6 @@ class AccountsPresenter(
         CoroutineScope(IO).launch {
             userLiveData.postValue(Resource.loading())
             userUseCase.getAllUsers().let {
-                println(it)
                 userLiveData.postValue(Resource.success(it))
             }
         }

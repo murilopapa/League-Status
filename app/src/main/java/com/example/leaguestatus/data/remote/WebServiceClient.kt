@@ -27,7 +27,7 @@ class WebServiceClient {
 
             val builder = request.newBuilder()
 
-            builder.addHeader("X-Riot-Token", "RGAPI-0eab9997-e1f0-4b5a-853e-35ddc87c00b1")
+            builder.addHeader("X-Riot-Token", "RGAPI-cf6f2941-3b81-4ba8-95a0-89589b3296af")
             builder.url(url)
 
             request = builder.build()

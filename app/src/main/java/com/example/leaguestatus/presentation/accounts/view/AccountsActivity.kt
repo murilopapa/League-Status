@@ -57,7 +57,6 @@ class AccountsActivity : AppCompatActivity() {
 
             } else {
                 Toast.makeText(this, "Not empty search argument", Toast.LENGTH_SHORT).show()
-                println("Searching ${include.editText.text}")
                 presenter.getSearchedSummoner(include.editText.text.toString())
             }
 

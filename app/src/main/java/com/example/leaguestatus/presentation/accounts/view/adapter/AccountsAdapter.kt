@@ -2,17 +2,18 @@ package com.example.leaguestatus.presentation.accounts.view.adapter
 
 
 import android.content.Context
-import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.leaguestatus.R
 import com.example.leaguestatus.model.User
 import com.squareup.picasso.Picasso
+import de.hdodenhof.circleimageview.CircleImageView
 import kotlinx.android.synthetic.main.account_card.view.*
 
-class AccountsAdapter() : RecyclerView.Adapter<AccountsAdapter.ViewHolder>() {
+class AccountsAdapter : RecyclerView.Adapter<AccountsAdapter.ViewHolder>() {
     lateinit var baseContext: Context
     private var data = mutableListOf<User>()
 
@@ -38,8 +39,9 @@ class AccountsAdapter() : RecyclerView.Adapter<AccountsAdapter.ViewHolder>() {
                 elo.text = "${summoner.queue.first().tier} ${summoner.queue.first().rank}"
                 pdl.text = "${summoner.queue.first().leaguePoints} PDL"
             }
-            icon.setImageURI(Uri.parse("http://ddragon.leagueoflegends.com/cdn/9.23.1/img/profileicon/588.png"))
-
+            Picasso.get()
+                .load("https://ddragon.leagueoflegends.com/cdn/9.23.1/img/profileicon/${summoner.summoner.profileIconId}.png")
+                .into(icon)
         }
 
     }
@@ -57,10 +59,10 @@ class AccountsAdapter() : RecyclerView.Adapter<AccountsAdapter.ViewHolder>() {
 
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val name = itemView.summonerName
-        val elo = itemView.summonerElo
-        val pdl = itemView.summonerPDL
-        val icon = itemView.summonerIcon
+        val name: TextView = itemView.summonerName
+        val elo: TextView = itemView.summonerElo
+        val pdl: TextView = itemView.summonerPDL
+        val icon: CircleImageView = itemView.summonerIcon
     }
 
 }

@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.leaguestatus.R
 import com.example.leaguestatus.model.User
 import com.squareup.picasso.Picasso
@@ -30,18 +31,25 @@ class AccountsAdapter : RecyclerView.Adapter<AccountsAdapter.ViewHolder>() {
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val summoner = data[position]
         holder.apply {
-            if (summoner.queue.isNullOrEmpty()) {
-                name.text = summoner.summoner.name
-                elo.text = "SEM RANKING"
-                pdl.text = "SEM PDL"
-            } else {
-                name.text = summoner.summoner.name
-                elo.text = "${summoner.queue.first().tier} ${summoner.queue.first().rank}"
-                pdl.text = "${summoner.queue.first().leaguePoints} PDL"
+            summoner.queue.forEach {
+                when (it.queueType) {
+                    "RANKED_FLEX_SR" -> {
+                        flexElo.text = "${it.tier} ${it.rank}"
+                        flexPdl.text = "${it.leaguePoints} PDL"
+                        queueNameFlex.text = "Flex:"
+                    }
+                    "RANKED_SOLO_5x5" -> {
+                        soloduoElo.text = "${it.tier} ${it.rank}"
+                        soloduoPdl.text = "${it.leaguePoints} PDL"
+                        queueNameSoloduo.text = "Solo/Duo:"
+                    }
+                }
             }
-            Picasso.get()
+            name.text = summoner.summoner.name
+            Glide.with(baseContext)
                 .load("https://ddragon.leagueoflegends.com/cdn/9.23.1/img/profileicon/${summoner.summoner.profileIconId}.png")
                 .into(icon)
+
         }
 
     }
@@ -60,9 +68,13 @@ class AccountsAdapter : RecyclerView.Adapter<AccountsAdapter.ViewHolder>() {
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val name: TextView = itemView.summonerName
-        val elo: TextView = itemView.summonerElo
-        val pdl: TextView = itemView.summonerPDL
+        val soloduoElo: TextView = itemView.summonerElo1
+        val soloduoPdl: TextView = itemView.summonerPDL1
+        val flexElo: TextView = itemView.summonerElo2
+        val flexPdl: TextView = itemView.summonerPDL2
         val icon: CircleImageView = itemView.summonerIcon
+        val queueNameSoloduo: TextView = itemView.soloduoQueue
+        val queueNameFlex: TextView = itemView.flexQueue
     }
 
 }

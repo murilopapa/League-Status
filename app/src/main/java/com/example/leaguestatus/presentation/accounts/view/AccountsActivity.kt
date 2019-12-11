@@ -45,6 +45,9 @@ class AccountsActivity : AppCompatActivity() {
 
                     progressBar.visibility = View.GONE
                 }
+                else -> {
+
+                }
             }
         })
     }
@@ -56,7 +59,6 @@ class AccountsActivity : AppCompatActivity() {
                 Toast.makeText(this, "Empty search argument", Toast.LENGTH_SHORT).show()
 
             } else {
-                Toast.makeText(this, "Not empty search argument", Toast.LENGTH_SHORT).show()
                 presenter.getSearchedSummoner(include.editText.text.toString())
             }
 

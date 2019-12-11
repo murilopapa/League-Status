@@ -10,7 +10,7 @@ import org.koin.android.ext.android.startKoin
 
 class SplashScreenActivity : AppCompatActivity() {
 
-    private val delay: Long = 10
+    private val delay: Long = 1500
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
